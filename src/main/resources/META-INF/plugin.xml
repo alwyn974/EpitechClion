@@ -1,18 +1,29 @@
 <!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
 <idea-plugin>
-    <id>com.github.alwyn974.epitechclion</id>
-    <name>EpitechClion</name>
+    <id>re.alwyn974.epitechclion</id>
+    <name>EpitechCLion</name>
     <vendor>alwyn974</vendor>
 
     <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.modules.clion</depends>
+    <depends>com.intellij.modules.clion.ide</depends>
+    <depends>com.intellij.modules.lang</depends>
+    <depends>com.intellij.modules.cidr.lang</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <applicationService serviceImplementation="com.github.alwyn974.epitechclion.services.MyApplicationService"/>
-        <projectService serviceImplementation="com.github.alwyn974.epitechclion.services.MyProjectService"/>
+        <applicationService serviceImplementation="re.alwyn974.epitechclion.services.MyApplicationService"/>
+        <projectService serviceImplementation="re.alwyn974.epitechclion.services.MyProjectService"/>
+        <!--TODO: add applicationConfigurable-->
+    </extensions>
+
+    <extensions defaultExtensionNs="cidr.lang">
+        <standaloneInspectionToolProvider implementation="re.alwyn974.epitechclion.inspections.EpitechCLionInspectionProvider"/>
     </extensions>
 
     <applicationListeners>
-        <listener class="com.github.alwyn974.epitechclion.listeners.MyProjectManagerListener"
+        <listener class="re.alwyn974.epitechclion.listeners.MyProjectManagerListener"
                   topic="com.intellij.openapi.project.ProjectManagerListener"/>
     </applicationListeners>
+
+
 </idea-plugin>

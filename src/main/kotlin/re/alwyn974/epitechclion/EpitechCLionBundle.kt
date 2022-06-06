@@ -1,13 +1,13 @@
-package com.github.alwyn974.epitechclion
+package re.alwyn974.epitechclion
 
 import com.intellij.DynamicBundle
 import org.jetbrains.annotations.NonNls
 import org.jetbrains.annotations.PropertyKey
 
 @NonNls
-private const val BUNDLE = "messages.MyBundle"
+private const val BUNDLE = "messages.EpitechCLionBundle"
 
-object MyBundle : DynamicBundle(BUNDLE) {
+object EpitechCLionBundle : DynamicBundle(BUNDLE) {
 
     @Suppress("SpreadOperator")
     @JvmStatic

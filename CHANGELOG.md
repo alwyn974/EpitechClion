@@ -1,6 +1,6 @@
 <!-- Keep a Changelog guide -> https://keepachangelog.com -->
 
-# EpitechClion Changelog
+# EpitechCLion Changelog
 
 ## [Unreleased]
 ### Added
