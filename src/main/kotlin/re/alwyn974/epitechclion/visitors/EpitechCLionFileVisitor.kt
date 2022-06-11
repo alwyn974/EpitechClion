@@ -1,11 +1,13 @@
 package re.alwyn974.epitechclion.visitors
 
+import com.intellij.codeInspection.ExternalAnnotatorInspectionVisitor
 import com.intellij.codeInspection.ProblemHighlightType
 import com.intellij.codeInspection.ProblemsHolder
 import com.jetbrains.cidr.lang.psi.*
 import com.jetbrains.cidr.lang.psi.impl.*
 import com.jetbrains.cidr.lang.psi.visitors.OCVisitor
 import re.alwyn974.epitechclion.EpitechCLionBundle
+import re.alwyn974.epitechclion.annotator.EpitechCLionAnnotator
 
 class EpitechCLionFileVisitor(private val holder: ProblemsHolder) : OCVisitor() {
 
@@ -22,12 +24,28 @@ class EpitechCLionFileVisitor(private val holder: ProblemsHolder) : OCVisitor() 
     private val minor: ProblemHighlightType = ProblemHighlightType.LIKE_UNKNOWN_SYMBOL
     private val info: ProblemHighlightType = ProblemHighlightType.WEAK_WARNING
 
+    private val annotator = EpitechCLionAnnotator()
+
     override fun visitOCElement(elem: OCElement?) {
         super.visitOCElement(elem)
     }
 
-    override fun visitOCFile(file: OCFile?) {
-        super.visitOCFile(file)
+    override fun visitOCFile(file: OCFile) {
+        val problemDescriptors = ExternalAnnotatorInspectionVisitor.checkFileWithExternalAnnotator(file.containingFile, holder.manager, false, annotator)
+
+        for (descriptor in problemDescriptors)
+            holder.registerProblem(descriptor.psiElement, descriptor.descriptionTemplate)
+
+        /*val document: Document = FileDocumentManager.getInstance().getDocument(file.virtualFile) ?: return
+        val warnings: List<EpitechCLionWarning> = CNormitek.cnormitek(document).toList();
+        for (warning in warnings) {
+            var level: ProblemHighlightType = when (warning.level) {
+                EpitechCLionWarningLevel.MAJOR -> major
+                EpitechCLionWarningLevel.MINOR -> minor
+                EpitechCLionWarningLevel.INFO -> info
+            }
+            //holder.registerProblem(stmt.originalElement, EpitechCLionBundle.message("C3_GOTO"), minor)
+        }*/
     }
 
     override fun visitExpression(expr: OCExpression?) {
@@ -71,7 +89,6 @@ class EpitechCLionFileVisitor(private val holder: ProblemsHolder) : OCVisitor() 
     }
 
     override fun visitGotoStatement(stmt: OCGotoStatement?) {
-        super.visitGotoStatement(stmt)
         if (stmt == null)
             return
         holder.registerProblem(stmt.originalElement, EpitechCLionBundle.message("C3_GOTO"), minor)
@@ -450,7 +467,6 @@ class EpitechCLionFileVisitor(private val holder: ProblemsHolder) : OCVisitor() 
     }
 
     override fun visitUsingStatement(usingStatement: OCCppUsingStatement?) {
-        super.visitUsingStatement(usingStatement)
         if (usingStatement == null)
             return
         holder.registerProblem(usingStatement.originalElement, "Using namespace is forbidden", info)
